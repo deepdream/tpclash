@@ -1,0 +1,38 @@
+port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+unified-delay: true
+global-client-fingerprint: chrome
+
+
+proxies:
+
+  - {name: SG-wapac-vless-tls-vision, server: 45.145.154.85, port: 29022, client-fingerprint: chrome, type: vless, uuid: 2619ac19-04a3-4cb6-9cd1-089be361fd86, tls: true, tfo: false, servername: sg2.deepdream.top, flow: xtls-rprx-vision, skip-cert-verify: true, udp: true}
+  - {name: SG-wapac-vm-ws-CDN, server: cloudflare.cfgo.cc, port: 8443, client-fingerprint: chrome, type: vmess, uuid: 2619ac19-04a3-4cb6-9cd1-089be361fd86, alterId: 0, cipher: auto, tls: true, tfo: false, skip-cert-verify: true, servername: sg2.deepdream.top, network: ws, ws-opts: {path: /zxxn, headers: {Host: sg2.deepdream.top}}, udp: true}
+  - {name: SG-wapac2-vm-ws-CDN, server: cloudflare.cfgo.cc, port: 8443, client-fingerprint: chrome, type: vmess, uuid: 70e69cea-f2ce-443d-9235-88c27238f42c, alterId: 0, cipher: auto, tls: true, tfo: false, skip-cert-verify: true, servername: sg3.deepdream.top, network: ws, ws-opts: {path: /ckat, headers: {Host: sg3.deepdream.top}}, udp: true}
+  - {name: SG-wapac2-vless-tls-vision, server: 45.145.154.87, port: 29022, client-fingerprint: chrome, type: vless, uuid: 70e69cea-f2ce-443d-9235-88c27238f42c, tls: true, tfo: false, servername: sg3.deepdream.top, flow: xtls-rprx-vision, skip-cert-verify: true, udp: true}
+  - {name: SG-bv-vm-ws-tls-CDN, server: cloudflare.cfgo.cc, port: 443, client-fingerprint: chrome, type: vmess, uuid: 5547d4d3-b371-4525-bed2-f5bbcd29d610, alterId: 0, cipher: auto, tls: true, tfo: false, skip-cert-verify: true, servername: bv.deepdream.top, network: ws, ws-opts: {path: 5547d4d3-b371-4525-bed2-f5bbcd29d610-vm, headers: {Host: bv.deepdream.top}}}
+  - {name: HK-vm-ws-CDN, server: cloudflare.cfgo.cc, port: 8443, client-fingerprint: chrome, type: vmess, uuid: 78bb5af6-3a71-4059-8166-ae921a1815f6, alterId: 0, cipher: auto, tls: true, tfo: false, skip-cert-verify: true, servername: hk.deepdream.top, network: ws, ws-opts: {path: 78bb5af6-3a71-4059-8166-ae921a1815f6-vm, headers: {Host: hk.deepdream.top}}}
+  - {name: TW-vm-ws-CDN, server: cloudflare.cfgo.cc, port: 8443, client-fingerprint: chrome, type: vmess, uuid: b65d9968-2b0d-4481-b704-183b3b6e48b3, alterId: 0, cipher: auto, tls: true, tfo: false, skip-cert-verify: true, servername: tw.deepdream.top, network: ws, ws-opts: {path: b65d9968-2b0d-4481-b704-183b3b6e48b3-vm, headers: {Host: tw.deepdream.top}}}
+proxy-groups:
+
+
+    
+- name: selectProxy
+  type: select
+  proxies:
+    - DIRECT
+    - SG-wapac-vless-tls-vision                                   
+    - SG-bv-vm-ws-tls-CDN
+    - SG-wapac-vm-ws-CDN
+    - SG-wapac2-vm-ws-CDN
+    - HK-vm-ws-CDN
+    - TW-vm-ws-CDN
+    - SG-wapac2-vless-tls-vision
+
+
+
+rules:
+  - GEOIP,CN,DIRECT
+  - MATCH,selectProxy
